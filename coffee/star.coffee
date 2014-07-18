@@ -90,9 +90,9 @@ a = GraphFactory.build 80, "star"
 b = GraphFactory.clone a, "dijkstra"
 c = GraphFactory.clone a, "starStrong"
 
-x = new AStar a
-y = new Dijkstra b
-z = new AStar c, (vertex) ->
+window.x = new AStar a
+window.y = new Dijkstra b
+window.z = new AStar c, (vertex) ->
 	dx = Math.abs(vertex.x - @to.x)
 	dy = Math.abs(vertex.y - @to.y)
 	Math.sqrt(dx*dx + dy*dy)/10
@@ -104,6 +104,6 @@ y.to b.vertices[59]
 z.from c.vertices[44]
 z.to c.vertices[59]
 
-x.start()
-y.start()
-z.start()
+# x.start()
+# y.start()
+# z.start()

@@ -2,11 +2,13 @@
 	<head>
 		<title>A* Pathfinding Viz</title>
 		<link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic|Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" type="text/css" href="bower_components/font-awesome/css/font-awesome.css" />
     <link type="text/css" rel="stylesheet" href="static/star.css" />
+		<link rel="stylesheet" href="bower_components/highlightjs/styles/github.css">
 	</head>
 	<body>
 		<div>
-			<h1>Pathfinding for Noobs</h1>
+			<h1>Visualising Pathfinding</h1>
 
 			<p>
 				Pathfinding is the process of getting from one point to another on a graph. Typically, we are trying to do this in the shortest distance possible. Although the examples presenting on this page assume that the graph is bidirectional, they can trivially be extended to the directional case.
@@ -19,16 +21,59 @@
 			<h2>Dijkstra's Algorithm</h2>
 
 			<p>
-				Dijkstra's algorithm is more effecient than the Bellman-Ford, running in <span class="order">O(VE)</span> time. It maintains an <em>open</em>-list of discovered nodes, and a <em>closed</em>-list of nodes for which the shortest path has been found. A demo is shown below.
+				Dijkstra's algorithm is more effecient than the Bellman-Ford, running in <span class="order">O(VE)</span> time. It maintains an <em>open</em>-list of discovered nodes, and a <em>closed</em>-list of nodes for which the shortest path has been found. A demo is shown in figure 1.
 			</p>
 
 			<div class="graph">
-				<svg style="height: 240px; width: 300px" class="dijkstra"></svg>
-				<div class="details">
-					<h2>Dijkstra's Algorithm</h2>
-					<em>Cycles</em> &#151; <span id="dijkstraCycles">0</span>&nbsp;&nbsp;
-					<em>Path Size</em> &#151; <span id="dijkstraSize">0</span>
+				<h5>Figure 1: Dijkstra's Algorithm</h5>
+				<div class="viz">
+					<svg style="height: 240px; width: 300px" class="dijkstra"></svg>
+					<div class="details">
+					</div>
 				</div>
+				<div class="code">
+					<div class="fn">
+						<pre><code class="coffeescript">
+pickNext: ->
+  if open.length is 0
+    return
+
+  selected = minG(open)
+  open.delete(selected)
+
+  closed.push selected
+
+  if selected == goal
+    return constructPath()
+						</code></pre>
+					</div>
+					<div class="fn">
+						<pre><code class="coffeescript">
+addNeighbours: ->
+  neighbours = graph.neighbours selected
+
+  for vertex in neighbours
+    if vertex in closed then continue
+
+    w = graph.weight(selected, vertex)
+    g = selected.g + w
+
+    if vertex in open
+      if g < vertex.g
+        vertex.g = g
+        vertex.parent = selected
+    else
+      vertex.g = g
+      vertex.parent = selected
+      open.push vertex
+						</code></pre>
+					</div>
+				</div>
+					<div class="playback">
+						<button><i class='fa fa-step-backward'></i></button>
+						<button onClick="javascript: y.start()"><i class='fa fa-play'></i></button>
+						<button><i class='fa fa-step-forward'></i></button>
+					</div>
 			</div>
 
 			<p>
@@ -84,6 +129,8 @@
 
     <script src="bower_components/d3/d3.min.js"></script>
     <script src="bower_components/lodash/dist/lodash.min.js"></script>
+		<script src="bower_components/highlightjs/highlight.pack.js"></script>
+		<script>hljs.initHighlightingOnLoad();</script>
 
     <script src="static/star.js"></script>
 	</body>

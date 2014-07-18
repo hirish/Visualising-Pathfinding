@@ -70,7 +70,7 @@ module.exports = class Graph
 			.attr 'height', (v) -> v.r
 			.style 'fill', (v) =>
 				if v.mark is "open"
-					'white'
+					'rgba(0,0,0,0)'
 				else if v.mark is "closed"
 					@colors v.g
 				else
