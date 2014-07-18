@@ -1,0 +1,90 @@
+<html>
+	<head>
+		<title>A* Pathfinding Viz</title>
+		<link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic|Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link type="text/css" rel="stylesheet" href="static/star.css" />
+	</head>
+	<body>
+		<div>
+			<h1>Pathfinding for Noobs</h1>
+
+			<p>
+				Pathfinding is the process of getting from one point to another on a graph. Typically, we are trying to do this in the shortest distance possible. Although the examples presenting on this page assume that the graph is bidirectional, they can trivially be extended to the directional case.
+			</p>
+
+			<p>
+				We explore three different approaches, the <strong>Bellman-Ford</strong>, <strong>Dijkstra's</strong> and <strong>A*</strong> algorithms. Each has different advantages. Bellman-Ford works in the presence of negative-weight graphs, while Dijkstra's is more efficient. A* is the fastest of the algorithms, but requires an <em>admissable</em> (discussed later) heuristic function to be <em>correct</em>.
+			</p>
+
+			<h2>Dijkstra's Algorithm</h2>
+
+			<p>
+				Dijkstra's algorithm is more effecient than the Bellman-Ford, running in <span class="order">O(VE)</span> time. It maintains an <em>open</em>-list of discovered nodes, and a <em>closed</em>-list of nodes for which the shortest path has been found. A demo is shown below.
+			</p>
+
+			<div class="graph">
+				<svg style="height: 240px; width: 300px" class="dijkstra"></svg>
+				<div class="details">
+					<h2>Dijkstra's Algorithm</h2>
+					<em>Cycles</em> &#151; <span id="dijkstraCycles">0</span>&nbsp;&nbsp;
+					<em>Path Size</em> &#151; <span id="dijkstraSize">0</span>
+				</div>
+			</div>
+
+			<p>
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam sollicitudin consequat enim, non tempus ligula adipiscing eget. Curabitur auctor sagittis magna, sit amet venenatis quam pharetra non. In elementum vitae nunc vel pretium. Quisque accumsan vitae ligula sit amet fringilla. Nam euismod arcu velit, non gravida sapien varius vel. Integer pretium non felis quis venenatis. Morbi ornare ultricies enim sed pulvinar. Phasellus pellentesque dapibus rhoncus. Nam eget suscipit nibh. Quisque quis tortor tristique, dapibus mauris ut, suscipit felis. Nulla ac laoreet mauris.
+			</p>
+
+			<h3>Time Complexity</h3>
+
+			<h3>Negative Weight Edges</h3>
+			<p>
+				Sed tempus ante a dui fermentum, vitae consectetur nunc viverra. Pellentesque lobortis nibh nulla. Donec condimentum lacinia felis, et tincidunt nibh suscipit vel. Quisque molestie nisl eget justo lobortis auctor. Phasellus posuere, velit sed posuere congue, magna libero imperdiet dui, nec consectetur ante odio quis sem. Suspendisse tempor condimentum enim, id volutpat tellus sollicitudin in. Vestibulum semper ultrices sem, non consequat sem bibendum sed. Vestibulum ac odio gravida, pretium sapien ut, consequat risus. Ut vitae metus ut quam aliquet tristique. Maecenas scelerisque bibendum mi ac varius. Proin elementum accumsan ullamcorper. Suspendisse eu tristique nisl. Vivamus rhoncus, justo ut semper pharetra, nibh purus sodales quam, non lobortis risus turpis tincidunt sapien. Sed ultricies mauris sed mauris imperdiet, sit amet bibendum odio molestie.
+			</p>
+
+			<h2>A* Algorithm</h2>
+
+			<p>
+				When watching Dijkstra's algorithm operate, it is obvious that it spends a large amount of time exploring unneccessary vertices, on the opposite side of the graph from the goal. The A* algorithm combats this by using a heurtistic function to select the next node to process. This heuristic function approximates the distance from a given vertex to the goal.
+			</p>
+
+			<div class="graph">
+				<svg style="height: 240px; width: 300px" class="star"></svg>
+				<div class="details">
+					<h2>A* Algorithm</h2>
+					<em>Cycles</em> &#151; <span id="starCycles">0</span>&nbsp;&nbsp;
+					<em>Path Size</em> &#151; <span id="starSize">0</span>
+				</div>
+			</div>
+
+			<p>
+				In euismod, enim nec sollicitudin suscipit, metus nisl eleifend risus, eget malesuada turpis nisl id dui. Duis tristique molestie mi at scelerisque. Pellentesque consequat ultricies metus ut scelerisque. Sed tristique massa sit amet dolor sagittis, vitae varius nibh auctor. Donec et risus eu est fringilla adipiscing quis a mauris. Donec et lorem hendrerit, bibendum sem at, tempus elit.
+			</p>
+
+			<h3>Heuristic Functions</h3>
+
+			<p>
+				Aenean tellus tortor, eleifend eget tempor sed, condimentum ut arcu. Duis vel aliquam erat. Integer feugiat id est vitae commodo. Sed sed pretium ipsum, nec porta odio. Donec posuere lacus nulla, sit amet pulvinar dolor ornare sit amet. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce scelerisque, lacus at varius mattis, justo leo tempor quam, pulvinar sagittis nisl elit vitae neque. Cras eu arcu vitae neque fermentum vehicula.
+			</p>
+
+			<div class="graph">
+				<svg style="height: 240px; width: 300px" class="starStrong"></svg>
+				<div class="details">
+					<h2>A* Algorithm, Strong Inadmissable Heuristic</h2>
+					<em>Cycles</em> &#151; <span id="starStrongCycles">0</span>&nbsp;&nbsp;
+					<em>Path Size</em> &#151; <span id="starStrongSize">0</span>
+				</div>
+			</div>
+			<p>
+				Proin euismod blandit odio, non feugiat nisi pretium ut. Praesent vel volutpat leo. Quisque ornare ante sed risus vestibulum, sit amet luctus elit suscipit. Fusce non placerat dui. Cras in nibh eu augue aliquet luctus eu non turpis. Aliquam erat volutpat. Nulla facilisi. Aliquam erat volutpat.
+			</p>
+		</div>
+
+		</svg>
+
+    <script src="bower_components/d3/d3.min.js"></script>
+    <script src="bower_components/lodash/dist/lodash.min.js"></script>
+
+    <script src="static/star.js"></script>
+	</body>
+</html>
