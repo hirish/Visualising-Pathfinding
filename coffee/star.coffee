@@ -1,108 +1,29 @@
+Runner = require './runner.coffee'
 GraphFactory = require './graphFactory.coffee'
+AStar = require './algorithms/aStar.coffee'
+Dijkstra = require './algorithms/dijkstra.coffee'
 
-class AStar
-	constructor: (@graph, @h = null) ->
-		@open = []
-		@closed = []
-		@cycles = 0
-		if not @h
-			@h = (vertex) ->
-				dx = Math.abs(vertex.x - @to.x)
-				dy = Math.abs(vertex.y - @to.y)
-				Math.sqrt(dx*dx + dy*dy)/30
+a = GraphFactory.build 80, "dijkstra"
+# b = GraphFactory.clone a, "star"
+# c = GraphFactory.clone a, "starStrong"
 
-	from: (@from) ->
-		@open = [ @from ]
-		@from.mark = "open"
-		@from.border = true
-		@graph.render()
+a.render()
+# b.render()
+# c.render()
 
-	to: (@to) ->
-		@to.border = true
-		@graph.render()
-	
-	pickNext: ->
-		if @open.length is 0
-			console.error "No path exists!"
-			return
+window.x = new Runner new Dijkstra a
+# window.y = new Runner new AStar b
+# window.z = new AStar c, (vertex) ->
+# 	dx = Math.abs(vertex.x - @to.x)
+# 	dy = Math.abs(vertex.y - @to.y)
+# 	Math.sqrt(dx*dx + dy*dy)/10
 
-		@cycles++
-
-		next = @open[0]
-		smallest = next.f
-
-		for vertex in @open
-			if vertex.f < smallest
-				smallest = vertex.f
-				next = vertex
-
-		@open = @open.filter (vertex) -> vertex isnt next
-		@closed.push next
-		next.mark = "closed"
-
-		@graph.render(@cycles, next)
-
-		if next is @to
-			console.log "Found!"
-			return
-
-		@selected = next
-
-	addNeighbours: ->
-		neighbours = @graph.neighbours @selected
-		for vertex in neighbours
-			if vertex in @closed then continue
-
-			w = @graph.edges[@selected.i][vertex.i]
-			g = @selected.g + w
-			h = @h(vertex)
-			f = g + h
-
-			if vertex in @open
-				if g < vertex.g
-					vertex.g = g
-					vertex.parent = @selected
-			else
-				vertex.g = g
-				vertex.h = h
-				vertex.f = f
-				vertex.parent = @selected
-				vertex.mark = "open"
-				@open.push vertex
-
-		@graph.render(@cycles, @selected)
-
-	start: ->
-		callback = =>
-			if @pickNext()?
-				setTimeout (=>
-					@addNeighbours()
-					callback()
-				), 100
-
-		setTimeout callback, 100
-
-class Dijkstra extends AStar
-	constructor: (graph) ->
-		super graph, (v) -> 0
-
-a = GraphFactory.build 80, "star"
-b = GraphFactory.clone a, "dijkstra"
-c = GraphFactory.clone a, "starStrong"
-
-window.x = new AStar a
-window.y = new Dijkstra b
-window.z = new AStar c, (vertex) ->
-	dx = Math.abs(vertex.x - @to.x)
-	dy = Math.abs(vertex.y - @to.y)
-	Math.sqrt(dx*dx + dy*dy)/10
-
-x.from a.vertices[44]
-x.to a.vertices[59]
-y.from b.vertices[44]
-y.to b.vertices[59]
-z.from c.vertices[44]
-z.to c.vertices[59]
+x.setFrom a.vertices[44]
+x.setTo a.vertices[59]
+# y.setFrom b.vertices[44]
+# y.setTo b.vertices[59]
+# z.setFrom c.vertices[44]
+# z.setTo c.vertices[59]
 
 # x.start()
 # y.start()

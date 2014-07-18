@@ -16,8 +16,6 @@ module.exports = class Graph
 							"#fee08b", "#fdae61", "#f46d43",
 							"#d73027", "#a50026"]
 
-		@render()
-
 	neighbours: (node) ->
 		weights = @edges[node.i]
 		vertices = _.map weights, (w, i) => if w > 0 then @vertices[i]
@@ -26,6 +24,7 @@ module.exports = class Graph
 	verticeShapes: ->
 		if @_vertices? then @_vertices
 		else
+			console.log 'uncached'
 			@_vertices = d3
 				.select 'svg.' + @svgClass
 				.selectAll 'rect'
@@ -55,7 +54,7 @@ module.exports = class Graph
 				.enter()
 				.append 'line'
 
-	render: (cycles=0, selected=null) ->
+	render: () ->
 		# @lines()
 		# 	.attr 'x1', (v) -> v.x1
 		# 	.attr 'y1', (v) -> v.y1
@@ -76,9 +75,3 @@ module.exports = class Graph
 				else
 					'#333'
 			.style 'stroke', (v) -> if v.border then '#09c' else 'none'
-
-		d3.select "##{@svgClass}Cycles"
-			.text cycles
-
-		d3.select "##{@svgClass}Size"
-			.text if selected? then selected.g else 0
