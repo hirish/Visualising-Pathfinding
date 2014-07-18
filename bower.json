@@ -1,0 +1,23 @@
+{
+  "name": "star",
+  "version": "0.0.0",
+  "homepage": "henryirish.com",
+  "authors": [
+    "hirish <me@henryirish.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.0",
+    "lodash": "",
+    "font-awesome": "~4.0.3",
+    "d3": ""
+  }
+}

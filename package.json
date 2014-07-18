@@ -1,0 +1,14 @@
+{
+  "name": "Star",
+  "version": "0.0.1",
+  "devDependencies": {
+    "coffee-script": "",
+    "coffeeify": "",
+    "gulp": "",
+    "gulp-browserify": "",
+    "gulp-plumber": "",
+    "gulp-rename": "",
+    "gulp-ruby-sass": "~0.5",
+    "reactify": ""
+  }
+}
