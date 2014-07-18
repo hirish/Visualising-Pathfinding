@@ -16,8 +16,11 @@ module.exports = class Graph
 							"#fee08b", "#fdae61", "#f46d43",
 							"#d73027", "#a50026"]
 
+		for vertex in @vertices
+			vertex.on 'change',  => @render()
+
 	neighbours: (node) ->
-		weights = @edges[node.i]
+		weights = @edges[node.get 'id']
 		vertices = _.map weights, (w, i) => if w > 0 then @vertices[i]
 		_.filter vertices, (v) -> v?
 	
@@ -32,46 +35,17 @@ module.exports = class Graph
 				.enter()
 				.append 'rect'
 
-	lines: ->
-		if @_lines? then @_lines
-		else
-			lines = []
-
-			for i in [0...@size]
-				for j in [0...i]
-					if @edges[i][j] > 0
-						lines.push
-							x1: @vertices[i].x + @vertices[i].r/2
-							y1: @vertices[i].y + @vertices[i].r/2
-							x2: @vertices[j].x + @vertices[j].r/2
-							y2: @vertices[j].y + @vertices[j].r/2
-							w: @edges[i][j]
-
-			@_lines = d3
-				.select 'svg.' + @svgClass
-				.selectAll 'line'
-				.data lines
-				.enter()
-				.append 'line'
-
 	render: () ->
-		# @lines()
-		# 	.attr 'x1', (v) -> v.x1
-		# 	.attr 'y1', (v) -> v.y1
-		# 	.attr 'x2', (v) -> v.x2
-		# 	.attr 'y2', (v) -> v.y2
-		# 	.attr 'stroke', '#333'
-
 		@verticeShapes()
-			.attr 'x', (v) -> v.x
-			.attr 'y', (v) -> v.y
-			.attr 'width', (v) -> v.r
-			.attr 'height', (v) -> v.r
+			.attr 'x', (v) -> v.get 'x'
+			.attr 'y', (v) -> v.get 'y'
+			.attr 'width', (v) -> v.get 'width'
+			.attr 'height', (v) -> v.get 'height'
 			.style 'fill', (v) =>
-				if v.mark is "open"
+				if v.get('mark') is "open"
 					'rgba(0,0,0,0)'
-				else if v.mark is "closed"
-					@colors v.g
+				else if v.get('mark') is "closed"
+					@colors v.get 'g'
 				else
 					'#333'
-			.style 'stroke', (v) -> if v.border then '#09c' else 'none'
+			.style 'stroke', (v) -> if v.get('border') then '#09c' else 'none'

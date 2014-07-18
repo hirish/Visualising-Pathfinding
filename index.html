@@ -38,19 +38,18 @@ pickNext: ->
   if open.length is 0
     return
 
-  selected = minG(open)
-  open.delete(selected)
-
-  closed.push selected
+  selected = min_g(open)
+  open.remove(selected)
+  closed.push(selected)
 
   if selected == goal
-    return constructPath()
+    return construct_path()
 						</code></pre>
 					</div>
 					<div class="fn">
 						<pre><code class="coffeescript">
 addNeighbours: ->
-  neighbours = graph.neighbours selected
+  neighbours = graph.neighbours(selected)
 
   for vertex in neighbours
     if vertex in closed then continue
@@ -70,9 +69,9 @@ addNeighbours: ->
 					</div>
 				</div>
 					<div class="playback">
-						<button><i class='fa fa-step-backward'></i></button>
-						<button onClick="javascript: y.start()"><i class='fa fa-play'></i></button>
-						<button><i class='fa fa-step-forward'></i></button>
+						<button onClick="javascript: x.prev()"><i class='fa fa-step-backward'></i></button>
+						<button onClick="javascript: x.start()"><i class='fa fa-play'></i></button>
+						<button onClick="javascript: x.next()"><i class='fa fa-step-forward'></i></button>
 					</div>
 			</div>
 
@@ -128,7 +127,8 @@ addNeighbours: ->
 		</svg>
 
     <script src="bower_components/d3/d3.min.js"></script>
-    <script src="bower_components/lodash/dist/lodash.min.js"></script>
+    <script src="bower_components/lodash/dist/lodash.underscore.min.js"></script>
+		<script src="bower_components/backbone/backbone.js"></script>
 		<script src="bower_components/highlightjs/highlight.pack.js"></script>
 		<script>hljs.initHighlightingOnLoad();</script>
 

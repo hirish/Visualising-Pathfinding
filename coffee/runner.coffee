@@ -8,7 +8,11 @@ module.exports = class Runner
 	next: ->
 		if @pos is @state.length - 1
 			x = @algorithm.next()
-			@state.push _.cloneDeep @algorithm.graph.vertices
+
+			@state.push(for vertex in @algorithm.graph.vertices
+				vertex.clone()
+			)
+
 			@pos++
 			return x
 		else
@@ -16,10 +20,9 @@ module.exports = class Runner
 			cachedVertices = @state[@pos]
 
 			for vertex, i in cachedVertices
-				for attr, key of vertex
-					@algorithm.graph.vertices[i][attr] = key
+				for attr, key of vertex.attributes
+					@algorithm.graph.vertices[i].set attr, key
 
-			@algorithm.graph.render()
 			return true
 
 	prev: ->
@@ -29,19 +32,20 @@ module.exports = class Runner
 			cachedVertices = @state[@pos]
 
 			for vertex, i in cachedVertices
-				for attr, key of vertex
-					@algorithm.graph.vertices[i][attr] = key
-
-			@algorithm.graph.render()
+				for attr, key of vertex.attributes
+					@algorithm.graph.vertices[i].set attr, key
 
 	start: ->
 		callback = =>
-			if @next()?
+			if @next()
 				setTimeout (callback), 50
 
 		callback()
 
 	setFrom: (v) ->
 		@algorithm.setFrom v
-		@state.push _.cloneDeep @algorithm.graph.vertices
+		@state.push(for vertex in @algorithm.graph.vertices
+			vertex.clone()
+		)
+
 	setTo: (v) -> @algorithm.setTo v

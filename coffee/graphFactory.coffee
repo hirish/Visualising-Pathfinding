@@ -1,5 +1,10 @@
 Graph = require './graph.coffee'
 
+Vertex = Backbone.Model.extend
+	clone: ->
+		json = JSON.parse JSON.stringify @toJSON()
+		new Vertex json
+
 module.exports = class GraphFactory
 	@EDGE_PROBABILITY: 1
 	@RANGE:
@@ -23,7 +28,7 @@ module.exports = class GraphFactory
 		return lower + Math.round(multiplier * Math.random())
 
 	@random_edge: (v1, v2) ->
-		distance = @dist [v1.x, v1.y], [v2.x, v2.y]
+		distance = @dist [v1.get('x'), v1.get('y')], [v2.get('x'), v2.get('y')]
 		addable = 1 - (Math.sqrt(distance)/100)
 		
 		if Math.sqrt(distance) > (2*@DISTANCE - 1) then return false
@@ -63,9 +68,10 @@ module.exports = class GraphFactory
 		
 		for i in range
 			[x, y] = @samplePos vertices
-			vertices.push
-				i: i
-				r: @DISTANCE-2
+			vertices.push new Vertex
+				id: i
+				width: @DISTANCE-2
+				height: @DISTANCE-2
 				x: @DISTANCE * (i % @WIDTH)
 				y: @DISTANCE * Math.floor(i / @WIDTH)
 				f: 0
@@ -91,7 +97,10 @@ module.exports = class GraphFactory
 		new Graph vertices, edges, svgClass
 
 	@clone: (graph, svgClass) ->
-		vertices = _.cloneDeep graph.vertices
+		vertices =
+			for vertex in graph.vertices
+				vertex.clone()
+
 		edges = _.cloneDeep graph.edges
 		new Graph vertices, edges, svgClass
 
