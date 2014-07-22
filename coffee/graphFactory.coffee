@@ -11,7 +11,8 @@ module.exports = class GraphFactory
 		EDGE: [1,5]
 		X: [50, 350]
 		Y: [100, 300]
-	@DISTANCE: 30
+	@SIZE: 30
+	@DISTANCE: 0
 	@WIDTH: 10
 
 	@NUMBER_SAMPLES: 20
@@ -31,7 +32,7 @@ module.exports = class GraphFactory
 		distance = @dist [v1.get('x'), v1.get('y')], [v2.get('x'), v2.get('y')]
 		addable = 1 - (Math.sqrt(distance)/100)
 		
-		if Math.sqrt(distance) > (2*@DISTANCE - 1) then return false
+		if Math.sqrt(distance) > (2*@SIZE - 1) then return false
 
 		return Math.random() < @EDGE_PROBABILITY
 
@@ -70,10 +71,10 @@ module.exports = class GraphFactory
 			[x, y] = @samplePos vertices
 			vertices.push new Vertex
 				id: i
-				width: @DISTANCE-2
-				height: @DISTANCE-2
-				x: @DISTANCE * (i % @WIDTH)
-				y: @DISTANCE * Math.floor(i / @WIDTH)
+				width: @SIZE-@DISTANCE
+				height: @SIZE-@DISTANCE
+				x: (@DISTANCE/2) + @SIZE * (i % @WIDTH)
+				y: (@DISTANCE/2) + @SIZE * Math.floor(i / @WIDTH)
 				f: 0
 				g: 0
 				h: 0
