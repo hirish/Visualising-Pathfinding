@@ -5,7 +5,20 @@ module.exports = class Runner
 		@state = []
 		@pos = 0
 
+	colorLineNo: ->
+		lineNo = (@pos % 5) + 1
+
+		lines = document.getElementsByClassName "line"
+		current = document.getElementsByClassName("line#{lineNo}")[0]
+
+		for line in lines
+			line.classList.remove "on"
+
+		if current
+			current.classList.add "on"
+
 	next: ->
+		@colorLineNo()
 		if @pos is @state.length - 1
 			x = @algorithm.next()
 
@@ -14,6 +27,7 @@ module.exports = class Runner
 			)
 
 			@pos++
+
 			return x
 		else
 			@pos++
@@ -26,6 +40,7 @@ module.exports = class Runner
 			return true
 
 	prev: ->
+		@colorLineNo()
 		if @pos isnt 0
 			@pos--
 
@@ -36,11 +51,19 @@ module.exports = class Runner
 					@algorithm.graph.vertices[i].set attr, key
 
 	start: ->
+		@playing = true
 		callback = =>
 			if @next()
-				setTimeout (callback), 50
+				@timeout = setTimeout (callback), 50
 
 		callback()
+
+	stop: ->
+		@playing = false
+		clearTimeout @timeout
+
+	playPause: ->
+		if @playing then @stop() else @start()
 
 	setFrom: (v) ->
 		@algorithm.setFrom v

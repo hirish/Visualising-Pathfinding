@@ -105,28 +105,18 @@ module.exports = class AStar
 
 	next: ->
 		runtimeOrder = [
-			{ fn: @checkPath, lineNo: 1 }
-			{ fn: @selectSmallestF, lineNo: 2 }
-			{ fn: @closeSelected, lineNo: 3 }
-			{ fn: @checkDest, lineNo: 4 }
-			{ fn: @addNeighbours, lineNo: 5 }
+			@checkPath
+			@selectSmallestF
+			@closeSelected
+			@checkDest
+			@addNeighbours
 		]
 
 		if not @counter? then return
 
-		{fn, lineNo} = runtimeOrder[@counter++ % runtimeOrder.length]
+		fn = runtimeOrder[@counter++ % runtimeOrder.length]
 
 		res = fn.apply @
-
-		lines = document.getElementsByClassName "line"
-		current = document.getElementsByClassName("line#{lineNo}")[0]
-
-		for line in lines
-			line.classList.remove "on"
-
-		if current
-			console.log current
-			current.classList.add "on"
 
 		# If a fn returns false, the algorithm terminates.
 		if res? and not res
