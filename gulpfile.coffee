@@ -14,7 +14,7 @@ gulp.task 'coffee', ->
     gulp.src 'coffee/star.coffee', read: false
         .pipe plumber()
         .pipe browserify
-            transform: ['coffeeify', 'reactify/undoubted']
+            transform: ['coffeeify']
             extensions: ['*.coffee']
         .pipe rename 'star.js'
         .pipe gulp.dest('./static')
