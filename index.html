@@ -33,38 +33,34 @@
 				</div>
 				<div class="code">
 					<div class="fn">
-						<pre><code class="coffeescript">
-pickNext: ->
-  if open.length is 0
-    return
-
-  selected = min_g(open)
-  open.remove(selected)
-  closed.push(selected)
-
-  if selected == goal
-    return construct_path()
+						<pre><code class="coffeescript hljs ">
+<span class="hljs-attribute">pickNext</span>:<span class="hljs-function"> -&gt;</span>
+<span class="line line1">  <span class="hljs-keyword">if</span> open.length <span class="hljs-keyword">is</span> <span class="hljs-number">0</span>
+<span class="hljs-keyword">    return</span></span>
+<span class="line line2">  selected = min_g(open)</span>
+<span class="line line3">  open.remove(selected)
+  closed.push(selected)</span>
+<span class="line line4">  <span class="hljs-keyword">if</span> selected == goal
+<span class="hljs-keyword">    return</span> construct_path()</span>
 						</code></pre>
 					</div>
 					<div class="fn">
-						<pre><code class="coffeescript">
-addNeighbours: ->
-  neighbours = graph.neighbours(selected)
-
-  for vertex in neighbours
-    if vertex in closed then continue
-
+						<pre><code class="coffeescript hljs ">
+<span class="hljs-attribute">addNeighbours</span>:<span class="hljs-function"> -&gt;</span>
+<span class="line line5">  neighbours = graph.neighbours(selected)</span>
+  <span class="line line6"><span class="hljs-keyword">for</span> vertex <span class="hljs-keyword">in</span> neighbours
+    <span class="hljs-keyword">if</span> vertex <span class="hljs-keyword">in</span> closed <span class="hljs-keyword">then</span> <span class="hljs-keyword">continue</span>
     w = graph.weight(selected, vertex)
     g = selected.g + w
 
-    if vertex in open
-      if g < vertex.g
+    <span class="hljs-keyword">if</span> vertex <span class="hljs-keyword">in</span> open
+      <span class="hljs-keyword">if</span> g &lt; vertex.g
         vertex.g = g
         vertex.parent = selected
-    else
+    <span class="hljs-keyword">else</span>
       vertex.g = g
       vertex.parent = selected
-      open.push vertex
+      open.push vertex</span>
 						</code></pre>
 					</div>
 				</div>
@@ -130,7 +126,7 @@ addNeighbours: ->
     <script src="bower_components/lodash/dist/lodash.underscore.min.js"></script>
 		<script src="bower_components/backbone/backbone.js"></script>
 		<script src="bower_components/highlightjs/highlight.pack.js"></script>
-		<script>hljs.initHighlightingOnLoad();</script>
+		<!-- <script>hljs.initHighlightingOnLoad();</script> -->
 
     <script src="static/star.js"></script>
 	</body>

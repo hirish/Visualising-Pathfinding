@@ -11,9 +11,13 @@ module.exports = class AStar
 
 	setFrom: (from) ->
 		if @open.length is 1 and @open[0] is @from
-			@from.mark = "open"
-			@from.border = true
+			# There is an old from to be reset, and the
+			# algorithm hasn't started.
+			@from.set mark: null, border: false
+
 		else if @from?
+			# There is an old from, but the algorithm has
+			# started.
 			console.error "Cannot set from"
 			return false
 
@@ -30,28 +34,45 @@ module.exports = class AStar
 		@to = to
 		@to.set border: true
 	
-	pickNext: ->
+	checkPath: ->
 		if @open.length is 0
+			# We've exhausted all reachable vertices.
 			console.error "No path exists!"
 			return false
 
+	selectSmallestF: ->
+		# Get the vertex in the open list with smallest f val.
 		next = @open[0]
 		smallest = next.get 'f'
-
 		for vertex in @open
 			if vertex.get('f') < smallest
 				smallest = vertex.get 'f'
 				next = vertex
-
-		@open = @open.filter (vertex) -> vertex isnt next
-		@closed.push next
-		next.set mark: "closed"
-
-		if next is @to
+		@selected = next
+	
+	checkDest: ->
+		if @selected is @to
 			console.log "Found!"
 			return false
 
-		@selected = next
+	closeSelected: ->
+		# Move it from open -> closed list.
+		@open = @open.filter (vertex) => vertex isnt @selected
+		@closed.push @selected
+		@selected.set mark: "closed"
+
+	pickNext: ->
+		if not @checkPath() then return false
+
+		# Get the vertex in the open list with smallest f val.
+		@getSmallestF()
+
+		# Move it from open -> closed list.
+		@closeSelected
+
+		# Check whether we've reached our destination.
+		@checkDest()
+
 		return true
 
 	addNeighbours: ->
@@ -59,13 +80,16 @@ module.exports = class AStar
 		for vertex in neighbours
 			if vertex in @closed then continue
 
+			# The weight to move from current vertex to this one.
 			w = @graph.edges[@selected.get 'id'][vertex.get 'id']
+
 			g = @selected.get('g') + w
 			h = @h(vertex)
 			f = g + h
 
 			if vertex in @open
 				if g < vertex.get 'g'
+					# We found a quicker path to this vertex.
 					vertex.set g: g, parent: @selected
 			else
 				vertex.set
@@ -81,14 +105,31 @@ module.exports = class AStar
 
 	next: ->
 		runtimeOrder = [
-			{ fn: @pickNext, lineNo: 1 }
-			{ fn: @addNeighbours, lineNo: 4 }
+			{ fn: @checkPath, lineNo: 1 }
+			{ fn: @selectSmallestF, lineNo: 2 }
+			{ fn: @closeSelected, lineNo: 3 }
+			{ fn: @checkDest, lineNo: 4 }
+			{ fn: @addNeighbours, lineNo: 5 }
 		]
 
 		if not @counter? then return
 
-		fn = runtimeOrder[@counter++ % runtimeOrder.length].fn
+		{fn, lineNo} = runtimeOrder[@counter++ % runtimeOrder.length]
+
 		res = fn.apply @
 
-		if not res then @counter = null
-		res
+		lines = document.getElementsByClassName "line"
+		current = document.getElementsByClassName("line#{lineNo}")[0]
+
+		for line in lines
+			line.classList.remove "on"
+
+		if current
+			console.log current
+			current.classList.add "on"
+
+		# If a fn returns false, the algorithm terminates.
+		if res? and not res
+			@counter = null
+		else
+			true

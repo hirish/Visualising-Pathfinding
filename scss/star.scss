@@ -110,3 +110,16 @@ button {
 	color: #eee;
 	outline: none;
 }
+
+.line {
+	display: inline-block;
+	padding: 5 10px;
+	margin: 2 0;
+	border-radius: 4px;
+}	
+
+.line.on {
+	background-color: #333;
+	color: white !important;
+	span {color: white !important;}
+}
